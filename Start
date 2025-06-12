@@ -1,6 +1,6 @@
 # Prerequisites
 
-Log into device with console cable
+Log into device with console cable and putty
 
 ##################################
 
@@ -9,7 +9,9 @@ to check:
 show ip ssh
 
 if not:
+
 ###################################
+
 Switch> enable
 Switch# configure terminal
 
@@ -17,11 +19,11 @@ Switch# configure terminal
 Switch(config)# hostname abcdefg
 
 # Step 2: Set a domain name
-Switch(config)# ip domain-name example.com
+Switch(config)# ip domain-name testdomain.com
 
-# Step 3: Generate the RSA key pair (choose 1024 or 2048 for modulus size)
+# Step 3: Generate the RSA key pair 
 Switch(config)# crypto key generate rsa
-The system will prompt you for the key modulus size (choose 1024 or 2048)
+The system will prompt you for the key size (choose 1024)
 
 # Step 4: Enable SSH version 2 (recommended for security)
 Switch(config)# ip ssh version 2
@@ -31,7 +33,7 @@ Switch(config)# line vty 0 4
 Switch(config-line)# transport input ssh
 Switch(config-line)# login local
 
-# Step 6: Create a user with a password (optional)
+# Step 6: Create a user with a password (optional but do it!)
 Switch(config)# username sshadmin privilege 15 secret password123
 
 # Step 7: Exit to save configuration
@@ -46,6 +48,8 @@ Switch# show running-config | include line vty
 
 Disconnect console
 
+Make sure either ethernet or wifi are connected (prefer wifi to make it more realistic)
+
 Attempt to ssh 
 
 #########################################
@@ -56,15 +60,19 @@ ssh -oKexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1 -oHo
 
 ###########################################
 
-I'll save you the trouble, VR does not allow passing arguments over SSH!!!
+At this point we know ssh is enabled and we can ssh into the device - if you could ssh without having to specify algorithms then move on to VR_setup
 
-Workaround is to generate keys to use instead of password:
-on windows:
+###########################################
+
+If you needed to specify algorithms, I'll save you the trouble of trying to use VR - VR does not allow passing algorithm arguments (or any arguments as far as I an figure) over SSH!!!
+
+The workaround I've come up with is to generate keys to use instead of password:
+on CLIENT:
 ssh-keygen -t rsa -b 1024 -f id_rsa
 
 *** I've only been able to get 1024 to work which is not ideal, but have been unable to add a longer key into the cisco devices
 
-ssh into the cisco device using provided command:
+ssh into the cisco device:
 conf t
 ip ssh pubkey-chain
 username sshadmin
@@ -76,7 +84,7 @@ wr
 
 ############################################
 
-TO USE KEYS:
+To use the keys:
 On CLIENT add or include in the ssh config file:
 
 Host 192.168.10.253 (or whatever the target IP is)
@@ -89,4 +97,4 @@ Host 192.168.10.253 (or whatever the target IP is)
 
 ##############################################
 
-Now we move onto VR...
+Now we move onto VR_setup...
