@@ -1,0 +1,36 @@
+Create a new query on VR
+
+Make sure to modify the parameters as needed for your device and set up - you can also leave them blank to add as needed when you run the query.
+
+Copy/paste - formatting may need adjusting if it doesn't work straight away.
+
+Run the query and be amazed!!
+
+####################################
+
+name: Query.Cisco.Device.SSH
+description: |
+   This artifact connects to a Cisco device via SSH and runs a command.
+
+type: CLIENT
+
+parameters:
+  - name: cisco_device_ip
+    description: "IP address of the Cisco device"
+    default: "192.168.10.253"
+  - name: sshusername
+    description: "The username for SSH authentication"
+    default: "sshadmin"  
+  - name: command_to_run
+    description: "The command to run on the Cisco device"
+    default: "show version"
+  - name: ssh_path
+    description: "The full path to the SSH client executable"
+    default: "C:/Windows/System32/OpenSSH/ssh.exe"
+
+
+sources:
+  - precondition: |
+      SELECT OS FROM info() WHERE OS = 'windows' OR OS = 'linux' OR OS = 'darwin'
+    query: |
+      SELECT * FROM execve(argv=[ssh_path, "-o", "StrictHostKeyChecking=no", sshusername + "@" + cisco_device_ip, command_to_run])
