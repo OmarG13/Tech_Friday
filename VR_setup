@@ -1,0 +1,57 @@
+Linux (there a few sections here that are not needed for this exercise but inlcuded just in case)
+--------------------------------------------------------------------------------------------------
+# 1. Download Velociraptor binary for Linux:
+# Visit https://www.velociraptor.app/downloads
+# Download the appropriate Linux executable (e.g., `velociraptor-vx.x.x-linux-amd64`)
+
+# 2. Make the binary executable:
+chmod +x velociraptor-vx.x.x-linux-amd64
+sudo mv velociraptor-vx.x.x-linux-amd64 /usr/local/bin/velociraptor
+
+# 3. Generate configuration files:
+velociraptor config generate > server.config.yaml
+velociraptor --config server.config.yaml config client > client.config.yaml
+
+velociraptor --config server.config.yaml user add admin --role administrator
+password: admin
+
+# 4. Run the Velociraptor GUI:
+velociraptor gui --config server.config.yaml
+
+# 5. Open your browser and go to:
+# http://localhost:8889
+# Default credentials: administrator / password shown in terminal
+
+# 6. Optional - Run Velociraptor server as a daemon:
+# (Best used in production with proper configs and security)
+velociraptor --config server.config.yaml frontend -v
+
+
+Windows (there a few sections here that are not needed for this exercise but inlcuded just in case)
+----------------------------------------------------------------------------------------------------
+# 1. Download Velociraptor binary for Windows:
+# Visit https://www.velociraptor.app/downloads
+# Download the appropriate Windows executable (usually named like `velociraptor-vx.x.x-windows-amd64.exe`)
+
+# 2. Move the binary to a desired directory and rename if desired:
+rename velociraptor-vx.x.x-windows-amd64.exe velociraptor.exe
+
+# 3. Open Command Prompt or PowerShell as Administrator.
+
+# 4. To generate a basic server and client configuration:
+velociraptor.exe config generate > server.config.yaml
+velociraptor.exe --config server.config.yaml config client > client.config.yaml
+
+velociraptor --config server.config.yaml user add admin --role administrator
+password: admin
+
+# 5. To run Velociraptor in standalone GUI mode:
+velociraptor.exe gui --config server.config.yaml
+
+# 6. Visit the GUI in your browser:
+# Navigate to http://localhost:8889
+# Default username is usually: administrator
+# Password will be printed in the terminal output after GUI launch
+
+# 7. Optional - Run as a service (advanced usage):
+velociraptor.exe --config server.config.yaml frontend -v
