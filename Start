@@ -1,0 +1,92 @@
+# Prerequisites
+
+Log into device with console cable
+
+##################################
+
+SSH enabled?
+to check:
+show ip ssh
+
+if not:
+###################################
+Switch> enable
+Switch# configure terminal
+
+# Step 1: Set a hostname
+Switch(config)# hostname abcdefg
+
+# Step 2: Set a domain name
+Switch(config)# ip domain-name example.com
+
+# Step 3: Generate the RSA key pair (choose 1024 or 2048 for modulus size)
+Switch(config)# crypto key generate rsa
+The system will prompt you for the key modulus size (choose 1024 or 2048)
+
+# Step 4: Enable SSH version 2 (recommended for security)
+Switch(config)# ip ssh version 2
+
+# Step 5: Configure the VTY lines to accept SSH
+Switch(config)# line vty 0 4
+Switch(config-line)# transport input ssh
+Switch(config-line)# login local
+
+# Step 6: Create a user with a password (optional)
+Switch(config)# username sshadmin privilege 15 secret password123
+
+# Step 7: Exit to save configuration
+Switch(config-line)# exit
+Switch(config)# exit
+
+# Step 8: Verify SSH is enabled
+Switch# show ip ssh
+Switch# show running-config | include line vty
+
+#######################################
+
+Disconnect console
+
+Attempt to ssh 
+
+#########################################
+
+If unable to, then legacy OSI probably the cause
+Attempt again with this:
+ssh -oKexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1 -oHostKeyAlgorithms=+ssh-rsa -oCiphers=+aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc -oMACs=+hmac-sha1,hmac-sha1-96,hmac-md5,hmac-md5-96 sshadmin@192.168.20.253
+
+###########################################
+
+I'll save you the trouble, VR does not allow passing arguments over SSH!!!
+
+Workaround is to generate keys to use instead of password:
+on windows:
+ssh-keygen -t rsa -b 1024 -f id_rsa
+
+*** I've only been able to get 1024 to work which is not ideal, but have been unable to add a longer key into the cisco devices
+
+ssh into the cisco device using provided command:
+conf t
+ip ssh pubkey-chain
+username sshadmin
+  key-string
+  [paste the content of id_rsa.pub]
+exit
+exit
+wr
+
+############################################
+
+TO USE KEYS:
+On CLIENT add or include in the ssh config file:
+
+Host 192.168.10.253 (or whatever the target IP is)
+    KexAlgorithms +diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
+    HostKeyAlgorithms +ssh-rsa
+    Ciphers +aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc
+    MACs +hmac-sha1,hmac-sha1-96,hmac-md5,hmac-md5-96
+    IdentityFile C:\Users\admin\.ssh\id_rsa
+    PubkeyAcceptedAlgorithms +ssh-rsa
+
+##############################################
+
+Now we move onto VR...
