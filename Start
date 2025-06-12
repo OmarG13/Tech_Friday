@@ -15,7 +15,7 @@ Switch> enable
 Switch# configure terminal
 
 # Step 1: Set a hostname
-Switch(config)# hostname abcdefg
+Switch(config)# hostname testing
 
 # Step 2: Set a domain name
 Switch(config)# ip domain-name testdomain.com
@@ -59,7 +59,7 @@ ssh -oKexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1 -oHo
 
 ###########################################
 
-At this point we know ssh is enabled and we can ssh into the device - if you could ssh without having to specify algorithms then move on to VR_setup
+At this point we know ssh is enabled and we can ssh into the device - if you could ssh without having to specify algorithms then move on to VR_setup...
 
 ###########################################
 
