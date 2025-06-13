@@ -77,7 +77,7 @@ conf t
 ip ssh pubkey-chain
 username sshadmin
   key-string
-  [paste the content of id_rsa.pub]
+  [paste the content of id_rsa.pub] on windows it is in system32
 exit
 exit
 wr
