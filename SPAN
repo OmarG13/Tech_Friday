@@ -1,0 +1,25 @@
+Log into the switch and enter enable mode
+
+Identify the host/source and destinations ports that will be monitored/forwarded:
+Source port is the port that has the data we need and destination port is the port that it is being forwarded to.
+In this case I used port 1 as the destination port and port 47 as the source port
+The switch will display the port number as soon as you plug in a cable into it - if this does not happen you can use the below:
+
+Switch>en
+Switch#show ip interface brief | include up
+
+Run the commands below to set up the monitoring:
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#monitor session 1 source interface gigabitethernet1/0/47 both
+Switch(config)#monitor session 1 destination interface gigabitethernet1/0/1
+Switch(config)#end
+
+Confirm that monitoring has been set up successfully:
+Switch>en
+Switch#show monitor session all
+
+On the destination device, capture the data flow with wireshark or similar.
+
+
+
