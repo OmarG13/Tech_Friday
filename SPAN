@@ -1,9 +1,10 @@
-Log into the switch and enter enable mode
+Log into the switch (you can use your newly acquired SSH skills here)
+
+Connect 2 ethernet cables; 1 from the switch to the server (or in this case your samtop) and the other from the switch to any other device that generates traffic of some sort.
 
 Identify the host/source and destinations ports that will be monitored/forwarded:
 Source port is the port that has the data we need and destination port is the port that it is being forwarded to.
-In this case I used port 1 as the destination port and port 47 as the source port
-The switch will display the port number as soon as you plug in a cable into it - if this does not happen you can use the below:
+The switch will display the port number as soon as you plug a cable into it - if this does not happen you can use the below:
 
 Switch>en
 Switch#show ip interface brief | include up
